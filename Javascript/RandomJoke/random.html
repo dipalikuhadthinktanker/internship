@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Random Joke</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #74ac85, #6b90c4, #995151);
+      }
+      section {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+      }
+      .box-bg {
+        background-color: #fff;
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.15);
+        padding: 25px;
+        border-radius: 10px;
+        width: 400px;
+        height: 270px;
+        text-align: center;
+        transition: transform 0.3s ease;
+        cursor: pointer;
+      }
+      .box-bg:hover {
+        transform: translateY(-5px);
+      }
+      .box-bg h2 {
+        margin-top: 0px;
+        font-size: 38px;
+        margin-bottom: 18px;
+      }
+      button {
+        background-color: green;
+        color: #fff;
+        border-radius: 5px;
+        padding: 8px 20px;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s, transform 0.2s;
+      }
+      button:focus-visible {
+        outline: none;
+      }
+      button:hover {
+        background-color: green;
+        transform: scale(1.05);
+      }
+      P {
+        text-align: left;
+        margin-top: 30px;
+        font-size: 18px;
+        font-weight: 600;
+      }
+      .punchline {
+        font-style: italic;
+      }
+      span {
+        color: #333;
+        font-size: 16px;
+        font-weight: 400;
+      }
+      #joke div:first-child {
+        margin-bottom: 15px;
+      }
+    </style>
+  </head>
+  <body onload="randomJoke()">
+    <section>
+      <div class="box-bg">
+        <h2>Random Jokes</h2>
+        <button type="button" onclick="randomJoke()">Create</button>
+        <p id="joke"></p>
+      </div>
+    </section>
+
+    <script>
+      function randomJoke() {
+        fetch("https://official-joke-api.appspot.com/random_joke")
+          .then((res) => res.json())
+          .then((result) => {
+            document.getElementById(
+              "joke"
+            ).innerHTML = `<div>Setup: <span class="setup"> ${result.setup} </span></div>
+                           <div>Punchline: <span class="punchline"> ${result.punchline} </span></div>`;
+            console.log(result);
+          })
+          .catch((error) => {
+            document.getElementById("joke").innerHTML = "Failed to load joke";
+            console.log(error);
+          });
+        console.log(error);
+      }
+    </script>
+  </body>
+</html>
