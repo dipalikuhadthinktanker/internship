@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fetch using async-await</title>
+    <link rel="stylesheet" href="asyn-await.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+  </head>
+  <body>
+    <section class="container">
+      <div class="box-bg">
+        <div class="box-head">
+          <h2>Users</h2>
+          <div class="top-right-group">
+            <div class="search-box">
+              <i class="fa fa-search"></i>
+              <input type="text" placeholder="Search users..." />
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="toggleUsers" />
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+        <div class="table-wrapper">
+          <div id="user-list"></div>
+        </div>
+        <div class="bottom-part">
+          <div id="user-count" class="footer"></div>
+          <div class="pagination">
+            <a href="#">&laquo;</a>
+            <a class="active" href="#">1</a>
+            <a href="#">2</a>
+            <a href="#">&raquo;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      document.getElementById("user-count").innerText = "Total Users: 0";
+      document
+        .getElementById("toggleUsers")
+        .addEventListener("change", async (e) => {
+          if (e.target.checked) {
+            try {
+              let response = await fetch(
+                "https://jsonplaceholder.typicode.com/users"
+              );
+              let user = await response.json();
+              let userData = user.slice(0, 5);
+              let table = `<table>
+                      <thead>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>City</th>
+                        <th>Company</th>
+                      </thead>
+                      <tbody>`;
+              // user show using map
+              table += userData
+                .map(
+                  (x) =>
+                    `<tr>
+              <td>${x.id}</td>
+              <td>${x.name}</td>
+              <td><a href="mailto:${x.email}">${x.email}</a></td>
+              <td>${x.address.city}</td>
+              <td>${x.company.name}</td>
+              </tr>`
+                )
+                .join("");
+
+              // user show using for..of
+              // for (let x of userData) {
+              //   table += `<tr>
+              //       <td>${x.id}</td>
+              //       <td>${x.name}</td>
+              //       <td><a href="mailto:${x.email}">${x.email}</a></td>
+              //       <td>${x.address.city}</td>
+              //       <td>${x.company.name}</td>
+              //     </tr>`;
+              // }
+              table += `</tbody></table>`;
+              document.getElementById("user-list").innerHTML = table;
+              document.getElementById(
+                "user-count"
+              ).innerText = `Total Users: ${userData.length}`;
+            } catch (error) {
+              console.log("Error fetching users");
+            }
+          } else {
+            document.getElementById("user-list").innerHTML = "";
+            document.getElementById("user-count").innerText = `Total Users: 0`;
+          }
+        });
+    </script>
+  </body>
+</html>
