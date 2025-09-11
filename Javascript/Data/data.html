@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Data</title>
+  </head>
+
+  <body>
+    <h2>Client Data</h2>
+    <table border="1">
+      <tr>
+        <th>Fields</th>
+        <th>MRD</th>
+        <th>Lithos</th>
+        <th>Prijems</th>
+      </tr>
+      <tbody id="table-body"></tbody>
+    </table>
+    <script>
+      fetch("data.json")
+        .then((res) => res.json())
+        .then((result) => {
+          console.log(result);
+
+          for (let x in result) {
+            // let mrdRec = result[x].MRD.records[0];
+            // let lithosRec = result[x].Lithos.records[0];
+            // let prijemsRec = result[x].Prijems.records[0];
+
+            const { MRD, Lithos, Prijems } = result[x];
+            // console.log("mrdData", Lithos);
+
+            // let mrdDue = result[x].MRD.due_totals.balance_amount;
+            // let lithosDue = result[x].Lithos.due_totals.balance_amount;
+            // let prijemsDue = result[x].Prijems.due_totals.balance_amount;
+
+            let tbody = document.getElementById("table-body");
+
+            let row = ` <tr>
+                            <td>Sales person</td>
+                            <td>${MRD.records[0].sales_person}</td>
+                            <td>${Lithos.records[0].sales_person}</td>
+                            <td>${Prijems.records[0].sales_person}</td>
+                        </tr>
+                        <tr>
+                            <td>Client Email</td>
+                            <td>${MRD.records[0].client_email}</td>
+                            <td>${Lithos.records[0].client_email}</td>
+                            <td>${Prijems.records[0].client_email}</td>
+                        </tr>
+                        <tr>
+                            <td>Lot Number</td>
+                            <td>${MRD.records[0].items[0].lot_number}</td>
+                            <td>${Lithos.records[0].items[0].lot_number}</td>
+                            <td>${Prijems.records[0].items[0].lot_number}</td>
+                        </tr>
+                        <tr>
+                            <td>Balance Amount</td>
+                            <td>${MRD.due_totals.balance_amount}</td>
+                            <td>${Lithos.due_totals.balance_amount}</td>
+                            <td>${Prijems.due_totals.balance_amount}</td>
+                        </tr>`;
+            tbody.innerHTML += row;
+          }
+        })
+        .catch((error) => document.write("can not fetch data"));
+    </script>
+  </body>
+</html>
