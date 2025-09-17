@@ -73,7 +73,12 @@ tr:hover {
   cursor: pointer;
   transform: translateX(5px);
 }
-
+thead th:first-child {
+  border-top-left-radius: 8px;
+}
+thead th:last-child {
+  border-top-right-radius: 8px;
+}
 td {
   font-size: 14px;
 }
@@ -82,71 +87,24 @@ a {
   text-decoration: none;
 }
 
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 28px;
-}
-
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: -2px;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  transition: 0.4s;
-  border-radius: 50px;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 22px;
-  width: 22px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  transition: 0.4s;
-  border-radius: 50px;
-}
-
-input:checked + .slider {
-  background-color: #2196f3;
-}
-
-input:checked + .slider:before {
-  transform: translateX(26px);
-}
-
-.pagination a {
-  display: inline-block;
-  padding: 8px 14px;
-  border-radius: 6px;
-  font-size: 14px;
-  color: #333;
-  background: #f1f1f1;
-  transition: 0.3s;
-  text-decoration: none;
-}
-
-.pagination a:hover {
-  background: #007bff;
-  color: #fff;
-}
-
 .pagination a.active {
   background: #007bff;
   color: #fff;
   font-weight: bold;
+}
+.pagination button {
+  background: #f1f5f9;
+  border: none;
+  padding: 8px 12px;
+  margin: 0 3px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.pagination .active {
+  background: #2563eb;
+  color: white;
 }
 
 .top-right-group {
@@ -185,30 +143,55 @@ input:checked + .slider:before {
   background: transparent;
   color: #000;
 }
-
 .bottom-part {
+  /* position: relative; */
+  margin-top: 40px;
+  padding: 10px 0;
   text-align: center;
 }
 
-.bottom-part {
-  position: relative;
-  margin-top: 40px;
-  padding: 10px 0;
-}
-
 #user-count {
-  position: absolute;
+  /* position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  top: -3px;
+  top: -3px; */
   font-size: 14px;
   color: #666;
 }
 
 .pagination {
-  position: absolute;
+  /* position: absolute;
   right: 0;
-  top: -12px;
+  top: -12px; */
   display: flex;
-  gap: 5px;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 15px;
+}
+.active {
+  background-color: green;
+  color: #fff;
+  border-radius: 5px;
+  font-size: 18px;
+  padding: 8px 15px;
+}
+button {
+  color: #333;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  font-size: 14px;
+  border: initial;
+  background-color: inherit;
+}
+.pagination button.active {
+  background: #28a745;
+  color: white;
+  border-color: #28a745;
+  font-weight: bold;
+}
+.arrow {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
