@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="cal.css" />
+  </head>
+  <body>
+    <div class="calculator">
+      <input
+        type="text"
+        class="display"
+        max="5"
+        id="display"
+        placeholder="0"
+        readonly
+        aria-placeholder="0"
+      />
+      <div class="button-group">
+        <button class="btn-grey" onclick="append('%')">%</button>
+        <button class="clear" onclick="clearDisplay()">C</button>
+        <button class="clear" onclick="clearDisplay()">CE</button>
+        <button class="btn-grey" onclick="backspace()">⌫</button>
+
+        <button class="btn-grey" onclick="reciprocal()">1/x</button>
+        <button class="btn-grey" onclick="power()">x²</button>
+        <button class="btn-grey" onclick="sqt()">√x</button>
+        <button class="operator" onclick="append('/')">÷</button>
+
+        <button class="btn-dark" onclick="append('7')">7</button>
+        <button class="btn-dark" onclick="append('8')">8</button>
+        <button class="btn-dark" onclick="append('9')">9</button>
+        <button class="operator" onclick="append('*')">×</button>
+
+        <button class="btn-dark" onclick="append('4')">4</button>
+        <button class="btn-dark" onclick="append('5')">5</button>
+        <button class="btn-dark" onclick="append('6')">6</button>
+        <button class="operator" onclick="append('-')">-</button>
+
+        <button class="btn-dark" onclick="append('1')">1</button>
+        <button class="btn-dark" onclick="append('2')">2</button>
+        <button class="btn-dark" onclick="append('3')">3</button>
+        <button class="operator" onclick="append('+')">+</button>
+
+        <button class="btn-dark zero" onclick="append('0')">0</button>
+        <button class="btn-dark bold" onclick="append('.')">.</button>
+        <button class="span-2 equal" onclick="cal()">=</button>
+      </div>
+    </div>
+
+    <script>
+      let display = document.getElementById("display");
+      function displayUpdate() {
+        const maxFontSize = 40;
+        const minFontSize = 20;
+        let fontSize = maxFontSize;
+        display.style.fontSize = fontSize + "px";
+
+        while (
+          display.scrollWidth > display.clientWidth &&
+          fontSize > minFontSize
+        ) {
+          fontSize -= 1;
+          display.style.fontSize = fontSize + "px";
+        }
+        console.log(display.value);
+        console.log("currentFontsize", fontSize);
+      }
+      function append(value) {
+        if (display.value.length < 20) {
+          display.value += value;
+          displayUpdate();
+        }
+        console.log(display.value);
+      }
+      function clearDisplay() {
+        display.value = "";
+        display.style.fontSize = "40px";
+      }
+      function backspace() {
+        display.value = display.value.slice(0, -1);
+        displayUpdate();
+      }
+      function power() {
+        display.value = Math.pow(display.value, 2);
+        displayUpdate();
+      }
+      function sqt() {
+        display.value = Math.sqrt(display.value);
+        displayUpdate();
+      }
+      function reciprocal() {
+        if (display.value !== "0") {
+          display.value = 1 / display.value;
+        }
+        displayUpdate();
+      }
+
+      function cal() {
+        try {
+          display.value = eval(display.value);
+        } catch {
+          display.value = "Error";
+        }
+        displayUpdate();
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To do list</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <style>
+      body {
+        margin: 0;
+        font-family: sans-serif;
+      }
+      section {
+        margin-top: 30px;
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: center;
+        padding: 0 15px;
+      }
+
+      .box-bg {
+        padding: 30px 25px;
+        border-radius: 10px;
+        width: 100%;
+        max-width: 500px;
+        border: 1px solid #ddd;
+      }
+
+      button {
+        background-color: green;
+        color: #fff;
+        border-radius: 15px;
+        padding: 13px 30px;
+        font-size: 16px;
+        cursor: pointer;
+        border: none;
+        outline: none;
+      }
+      .head h2 {
+        font-size: 36px;
+        margin: 0px;
+      }
+
+      .head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .type-text {
+        margin: 25px 0 40px 0px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: #edeef0;
+        padding-left: 20px;
+        border-radius: 10px;
+      }
+
+      .type-text input {
+        flex: 1;
+        border-radius: 10px;
+        padding: 10px;
+        font-size: 14px;
+        background: transparent;
+        border: none;
+        outline: none;
+      }
+
+      ul {
+        border: 1px solid #ddd;
+        padding: 20px;
+        border-radius: 10px;
+        height: 277px;
+        overflow: auto;
+      }
+
+      ul li {
+        list-style: none;
+        font-size: 15px;
+        padding: 11px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border: 1px solid #eee;
+        border-radius: 10px;
+        margin-bottom: 10px;
+      }
+
+      ul li:last-child {
+        margin-bottom: 0;
+      }
+
+      .actions i {
+        margin-left: 10px;
+        cursor: pointer;
+        font-size: 13px;
+        border-radius: 5px;
+        padding: 6px 8px;
+      }
+
+      .actions i:first-child {
+        margin-left: 0px;
+      }
+
+      .actions i.fa-pencil {
+        background-color: #6c757d;
+        color: #fff;
+      }
+
+      .actions i.fa-trash-o {
+        background-color: #dc3545;
+        color: #fff;
+      }
+      span {
+        width: 83%;
+        word-wrap: break-word;
+        line-height: 20px;
+      }
+      input#checkbox {
+        vertical-align: middle;
+        margin: 0 5px 0 0;
+      }
+      input[type="checkbox"]:checked + span {
+        text-decoration: line-through;
+        color: grey;
+      }
+    </style>
+  </head>
+
+  <body>
+    <section>
+      <div class="box-bg">
+        <div class="head">
+          <h2>Task</h2>
+        </div>
+        <div class="type-text">
+          <input type="text" id="input-box" placeholder="Write your task..." />
+          <button onclick="createTask()"><i class="fa fa-plus"></i></button>
+        </div>
+        <div id="validation">
+          <span></span>
+        </div>
+        <ul id="show-list"></ul>
+      </div>
+    </section>
+
+    <script>
+      const taskInput = document.getElementById("input-box");
+      const taskList = document.getElementById("show-list");
+      const validInput = document.getElementById("validation");
+      let taskListArr = [];
+
+      taskInput.addEventListener("input", () => {
+        validInput.innerHTML = "";
+        validInput.removeAttribute("style");
+      });
+
+      const gettaskListFromeLS = () => {
+        return JSON.parse(localStorage.getItem("To do task")) || [];
+      };
+
+      const addtaskListLocalstorage = (todo) => {
+        localStorage.setItem("To do task", JSON.stringify(todo));
+      };
+      const showtaskList = () => {
+        taskList.innerHTML = "";
+        taskListArr = gettaskListFromeLS();
+        taskListArr.forEach((curList, index) => {
+          const taskListHtml = `<li data-index="${index}">
+      <div id="checkbox">
+        <input type="checkbox" ${curList.completed ? "checked" : ""} >
+        <span>${curList.text}</span>
+      </div>
+      <div class="actions">
+        <i class="fa fa-pencil editTask" title="Edit"></i>
+        <i class="fa fa-trash-o deleteTask" title="Delete"></i>
+      </div>
+    </li>`;
+          taskList.insertAdjacentHTML("beforeend", taskListHtml);
+        });
+        const checkboxes = taskList.querySelectorAll("input[type='checkbox']");
+        checkboxes.forEach((checkbox, idx) => {
+          checkbox.addEventListener("change", () => {
+            taskListArr[idx].completed = checkbox.checked;
+            addtaskListLocalstorage(taskListArr);
+            showtaskList();
+          });
+        });
+      };
+
+      function createTask() {
+        taskListArr = gettaskListFromeLS();
+        if (taskInput.value.trim() === "") {
+          validInput.innerHTML = "Enter your task";
+          validInput.style.marginTop = "-27px";
+          validInput.style.paddingLeft = "28px";
+          validInput.style.color = "red";
+          validInput.style.fontSize = "12px";
+          return;
+        } else {
+          validInput.removeAttribute("style");
+        }
+        taskListArr.unshift({ text: taskInput.value, completed: false });
+        addtaskListLocalstorage(taskListArr);
+        showtaskList();
+        taskInput.value = "";
+      }
+      taskList.addEventListener("click", (e) => {
+        let li = e.target.closest("li");
+        let index = li.getAttribute("data-index");
+        if (e.target.classList.contains("deleteTask")) {
+          taskListArr = gettaskListFromeLS();
+          taskListArr.splice(index, 1);
+          addtaskListLocalstorage(taskListArr);
+          showtaskList();
+        } else if (e.target.classList.contains("editTask")) {
+          const span = e.target.closest("li").querySelector("span");
+          const updateTask = prompt("Task:", span.textContent);
+          if (updateTask && updateTask.trim() !== "") {
+            taskListArr = gettaskListFromeLS();
+            taskListArr.splice(index, 1);
+            taskListArr.unshift(updateTask);
+            addtaskListLocalstorage(taskListArr);
+            showtaskList();
+          }
+        }
+      });
+      showtaskList();
+    </script>
+  </body>
+</html>

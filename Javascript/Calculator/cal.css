@@ -1,0 +1,99 @@
+body {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Orbitron", monospace !important;
+}
+
+.button-group {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 13px;
+  padding: 30px 20px;
+}
+.span-2 {
+  grid-column: span 2;
+}
+.calculator {
+  border-radius: 20px;
+  box-shadow: 0px 4px 15px rgb(0 0 0 / 16%);
+  background-color: #000;
+  margin-top: 20px;
+  overflow: hidden;
+}
+button {
+  font-size: 1rem;
+  border: none;
+  border-radius: 100px;
+  height: 39px;
+  width: 100%;
+  margin: auto;
+  cursor: grab;
+  transition: 0.2s;
+  box-shadow: 0 4px 6px rgb(63 62 62 / 30%);
+  color: #fff;
+}
+button.span-2 {
+  width: 100%;
+  border-radius: 50px;
+}
+button:active {
+  transform: scale(0.9);
+}
+.btn-dark {
+  background: #333;
+}
+.btn-grey {
+  background: #777;
+  font-size: 1.4rem;
+}
+.display {
+  background: #777;
+  color: #fff;
+  font-size: 40px;
+  padding: 30px 20px;
+  height: 40px;
+  width: 277px;
+  text-align: right;
+  margin: 15px 15px 0px;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+.display::placeholder {
+  color: white;
+}
+.display:focus-visible {
+  outline: inherit;
+}
+.operator {
+  background: #007bff;
+  font-size: 2rem;
+}
+
+.operator:hover {
+  background: #3399ff;
+}
+
+.clear {
+  background: #ff4d4d;
+  font-size: 1.1rem;
+}
+
+.clear:hover {
+  background: #ff6666;
+}
+.equal {
+  background: #28a745;
+  font-size: 2rem;
+}
+
+.equal:hover {
+  background: #45c76a;
+}
+.bold {
+  font-weight: 600;
+}
+.height {
+  height: 35px;
+}

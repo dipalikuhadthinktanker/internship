@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fetch using async-await</title>
+    <link rel="stylesheet" href="asyn-await.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+  </head>
+  <body onload="displayUser()">
+    <section class="container">
+      <div class="box-bg">
+        <div class="box-head">
+          <h2>Users</h2>
+          <div class="top-right-group">
+            <div class="search-box">
+              <i class="fa fa-search"></i>
+              <input
+                type="text"
+                placeholder="Search users..."
+                id="searchInput"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="table-wrapper">
+          <div id="user-list"></div>
+        </div>
+        <div class="bottom-part">
+          <div id="user-count" class="footer"></div>
+          <div class="pagination" id="pagination"></div>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      const itemsPerPage = 5;
+      let users = [];
+      let userData = [];
+      let currentPage = 1;
+      let searchTimer;
+
+      async function displayUser(page = 1) {
+        try {
+          let response = await fetch("dummy_data_50.json");
+          users = await response.json();
+          currentPage = page;
+          const start = (currentPage - 1) * itemsPerPage;
+          const end = start + itemsPerPage;
+          userData = users.slice(start, end);
+          renderTable(userData);
+          document.getElementById(
+            "user-count"
+          ).innerText = `Total Users: ${users.length}`;
+          paginated();
+        } catch (error) {
+          console.error("Error fetching users", error);
+        }
+      }
+
+      function renderTable(data) {
+        let table = `<table>
+                    <thead>
+                      <th>Id</th>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>City</th>
+                      <th>Company</th>
+                    </thead>
+                    <tbody>`;
+        table += data
+          .map(
+            (x) =>
+              `<tr>
+              <td>${x.id}</td>
+              <td>${x.name}</td>
+              <td><a href="mailto:${x.email}">${x.email}</a></td>
+              <td>${x.address.city}</td>
+              <td>${x.company.name}</td>
+           </tr>`
+          )
+          .join("");
+
+        table += `</tbody></table>`;
+        document.getElementById("user-list").innerHTML = table;
+      }
+
+      function paginated() {
+        const totalPages = Math.ceil(users.length / itemsPerPage);
+        const paginationHtml = document.getElementById("pagination");
+        let buttons = "";
+        if (currentPage > 1) {
+          buttons += `<button onclick="changePage(${
+            currentPage - 1
+          })">&laquo;</button>`;
+        } else {
+          buttons += `<button class="arrow">&laquo;</button>`;
+        }
+        if (currentPage > 2) {
+          buttons += `<button onclick="changePage(1)">1</button>`;
+          if (currentPage > 3) {
+            buttons += `<span class="dots">...</span>`;
+          }
+        }
+        let startPage = Math.max(1, currentPage - 1);
+        let endPage = Math.min(totalPages, currentPage + 1);
+
+        for (let i = startPage; i <= endPage; i++) {
+          if (i === currentPage) {
+            buttons += `<div class="btn-group"><button class="active" onclick="changePage(${i})">${i}</button></div>`;
+          } else {
+            buttons += `<div class="btn-group"><button onclick="changePage(${i})">${i}</button></div>`;
+          }
+        }
+        if (currentPage < totalPages - 1) {
+          if (currentPage < totalPages - 2) {
+            buttons += `<span class="dots">...</span>`;
+          }
+          buttons += `<button onclick="changePage(${totalPages})">${totalPages}</button>`;
+        }
+
+        if (currentPage < totalPages) {
+          buttons += `<button onclick="changePage(${
+            currentPage + 1
+          })">&raquo;</button>`;
+        } else {
+          buttons += `<button class="arrow">&raquo;</button>`;
+        }
+        paginationHtml.innerHTML = buttons;
+      }
+
+      function changePage(page) {
+        displayUser(page);
+      }
+
+      let query = document.getElementById("searchInput");
+      query.addEventListener("keyup", (e) => {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(() => {
+          let searchValue = e.target.value.toLowerCase();
+          let filterUser = userData.filter(
+            (user) =>
+              user.name.toLowerCase().includes(searchValue) ||
+              user.email.toLowerCase().includes(searchValue) ||
+              user.address.city.toLowerCase().includes(searchValue) ||
+              user.company.name.toLowerCase().includes(searchValue) ||
+              user.website.toLowerCase().includes(searchValue)
+          );
+          renderTable(filterUser);
+        }, 2000);
+      });
+    </script>
+  </body>
+</html>

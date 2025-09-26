@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <style>
+      :root {
+        --primary: #f35525;
+        --secondary: #1e1e1e;
+        --sect-small-title: #ee626b;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        font-size: 14px;
+      }
+
+      .container {
+        margin-top: 70px;
+        margin-bottom: 70px;
+        position: relative;
+      }
+
+      #banner-img {
+        display: flex;
+      }
+
+      .image-part img {
+        width: 100%;
+        transition: opacity 2s ease-in-out;
+      }
+
+      .left-arrow,
+      .right-arrow {
+        background-color: rgba(255, 255, 255, 0.3);
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        color: #fff;
+        position: absolute;
+        top: 50%;
+        font-size: 24px;
+        transition: all 0.3s;
+        cursor: pointer;
+      }
+      .left-arrow {
+        left: 47px;
+      }
+      .right-arrow {
+        right: 47px;
+      }
+      .dots {
+        display: flex;
+        justify-content: center;
+        margin-top: 15px;
+        gap: 8px;
+      }
+
+      .dots span {
+        height: 12px;
+        width: 12px;
+        background: #ccc;
+        border-radius: 50%;
+        display: inline-block;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+
+      .dots span.active {
+        background: var(--primary);
+      }
+    </style>
+  </head>
+  <body onload="fetchImages()">
+    <div class="container">
+      <div id="banner-img"></div>
+      <div class="dots" id="dots"></div>
+    </div>
+    <div class="btn-group">
+      <div class="left-arrow" onclick="prevImage()">
+        <i class="fa-solid fa-angle-left"></i>
+      </div>
+      <div class="right-arrow" onclick="nextImage()">
+        <i class="fa-solid fa-angle-right"></i>
+      </div>
+    </div>
+
+    <script>
+      let imgShow = document.getElementById("banner-img");
+      let imgDots = document.getElementById("dots");
+
+      let images = [];
+      let currentIndex = 1;
+      const imageParPage = 1;
+
+      async function fetchImages() {
+        try {
+          let response = await fetch("img.json");
+          images = await response.json();
+          showImages();
+          showDots();
+        } catch (error) {
+          console.error("Error fetching images", error);
+        }
+      }
+
+      function showImages() {
+        const start = (currentIndex - 1) * imageParPage;
+        const end = start + imageParPage;
+        let imageData = images.slice(start, end);
+        console.log(imageData);
+        let imgHtml = imageData
+          .map(
+            (img) => `<div class="image-part">
+                        <img src="${img.src}" alt="Banner ${img.alt}">
+                      </div>`
+          )
+          .join("");
+        imgShow.innerHTML = imgHtml;
+      }
+
+      function showDots() {
+        let dotHtml = "";
+        for (let i = 0; i < images.length; i++) {
+          if (i + 1 === currentIndex) {
+            dotHtml += `<span class="active"></span>`;
+          } else {
+            dotHtml += `<span onclick ="imageChange(${i + 1})"></span>`;
+          }
+        }
+        imgDots.innerHTML = dotHtml;
+      }
+
+      function nextImage() {
+        if (currentIndex < images.length) {
+          currentIndex++;
+        } else {
+          currentIndex = 1;
+        }
+        showImages();
+        showDots();
+      }
+      function prevImage() {
+        if (currentIndex > 1) {
+          currentIndex--;
+        } else {
+          currentIndex = images.length;
+        }
+        showImages();
+        showDots();
+      }
+      function imageChange(image) {
+        currentIndex = image;
+        showImages();
+        showDots();
+      }
+
+      setInterval(() => {
+        // showImages();
+        clearInterval();
+        nextImage();
+      }, 4000);
+    </script>
+  </body>
+</html>
