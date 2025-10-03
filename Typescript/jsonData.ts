@@ -392,6 +392,6 @@ const jsonData: Tresp[] = [
     },
   },
 ];
-
+//print json data
 const result = JSON.stringify(jsonData, null, 2);
 console.log(result);
