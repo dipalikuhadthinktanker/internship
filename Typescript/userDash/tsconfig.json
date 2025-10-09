@@ -1,0 +1,9 @@
+{
+  // Visit https://aka.ms/tsconfig to read more about this file
+  "compilerOptions": {
+    "module": "none",
+    "target": "ES6",
+    "types": [],
+    "strict": true
+  }
+}

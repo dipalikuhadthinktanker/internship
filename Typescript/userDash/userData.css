@@ -1,0 +1,171 @@
+body {
+  margin-top: 40px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+th,
+td {
+  padding: 12px 15px;
+  text-align: left;
+}
+
+th {
+  background: #000;
+  color: #fff;
+  text-transform: uppercase;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+}
+
+tr:nth-child(even) {
+  background: #fbfbfb;
+}
+
+h2 {
+  margin: 0;
+  font-size: 38px;
+  font-weight: 600;
+  color: #333;
+}
+
+thead tr:hover {
+  background: inherit;
+  cursor: inherit;
+  transform: inherit;
+}
+
+tr {
+  transition: all 0.3s ease;
+}
+thead th:first-child {
+  border-top-left-radius: 8px;
+}
+thead th:last-child {
+  border-top-right-radius: 8px;
+}
+td {
+  font-size: 14px;
+}
+
+a {
+  text-decoration: none;
+}
+
+.pagination a.active {
+  background: #007bff;
+  color: #fff;
+  font-weight: bold;
+}
+.pagination button {
+  background: #f1f5f9;
+  border: none;
+  padding: 8px 12px;
+  margin: 0 3px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.pagination .active {
+  background: #2563eb;
+  color: white;
+}
+
+.top-right-group {
+  display: flex;
+  align-items: center;
+}
+
+.search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 30px;
+  padding: 7px 15px;
+  width: 200px;
+  transition: all 0.3s ease;
+  margin-right: 15px;
+}
+
+.search-box:focus-within {
+  border-color: #b1a3a3;
+}
+
+.search-box i {
+  font-size: 16px;
+  color: #888;
+  margin-right: 10px;
+  margin-bottom: 1px;
+}
+
+.search-box input {
+  border: none;
+  outline: none;
+  font-size: 13px;
+  background: transparent;
+  color: #000;
+}
+.bottom-part {
+  margin-top: 40px;
+  padding: 10px 0;
+  text-align: center;
+}
+
+#user-count {
+  font-size: 14px;
+  color: #666;
+}
+
+.pagination {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 30px;
+}
+.btn-group.button {
+  color: #333;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  font-size: 14px;
+  border: initial;
+  background-color: inherit;
+}
+.pagination button.active {
+  background: #000;
+  color: white;
+  font-weight: bold;
+}
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 25px;
+}
+.container {
+  padding: 0px 30px;
+}
+select#role {
+  border-color: #ccc;
+  border-radius: 10px;
+  padding: 10px 15px;
+  width: 166px;
+}
+select#role:focus-visible {
+  outline: inherit;
+}
+button#restData {
+  border-color: transparent;
+  border-radius: 5px;
+  padding: 8px 15px;
+  background-color: #000;
+  color: #fff;
+  margin-left: 15px;
+}
