@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Random User Directory</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link rel="stylesheet" href="randUser.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="head">
+        <h1>Random Users</h1>
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Search by name or country..."
+        />
+        <button id="refreshBtn">Refresh</button>
+      </div>
+      <div id="loader"></div>
+      <div id="userContainer" class="user-container"></div>
+
+      <div id="userModal" class="modal">
+        <div class="modal-content">
+          <span id="closeModal" class="close"
+            ><i class="fa fa-times" aria-hidden="true"></i
+          ></span>
+          <div class="model-inner-part">
+            <div class="model-card-left">
+              <img id="modalImage" alt="User Image" />
+            </div>
+            <div class="model-card-right">
+              <h3 id="modalName"></h3>
+              <p id="modalEmail"></p>
+              <p id="modalCountry"></p>
+              <p id="modalPhone"></p>
+              <p id="modalDob"></p>
+              <p id="modalAge"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pagination" id="pagination"></div>
+    </div>
+
+    <script type="module" src="randUser.js"></script>
+  </body>
+</html>
