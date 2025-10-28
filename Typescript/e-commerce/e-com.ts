@@ -6,7 +6,6 @@ let cart: Product[] = JSON.parse(localStorage.getItem("cart") || "[]");
 const itemsPerPage: number = 8;
 let currentPage: number = 1;
 let filteredProducts: Product[] = [];
-let timer: number;
 const productContainer = document.getElementById(
   "productContainer"
 ) as HTMLElement;
@@ -15,6 +14,9 @@ const cartCount = document.getElementById("cartCount") as HTMLElement;
 const cartItemsContainer = document.getElementById("cartItems") as HTMLElement;
 const cartIcon = document.getElementById("cartIcon") as HTMLElement;
 const carthideShow = document.querySelector(".cart") as HTMLElement;
+const cartTotalPrice = document.getElementById("cartTotal") as HTMLElement;
+const checkoutbtn = document.getElementById("checkoutBtn") as HTMLElement;
+
 //Category nav tab
 const categoryButtons =
   document.querySelectorAll<HTMLButtonElement>(".category-btn");
@@ -33,14 +35,12 @@ const loaderHtml = document.getElementById("loader") as HTMLElement;
 const saveCartToLocalStorage = () => {
   localStorage.setItem("cart", JSON.stringify(cart));
 };
-
 // Show loader
 const showLoader = () => {
   loaderHtml.style.display = "block";
   productContainer.style.display = "none";
   paginationContainer.style.display = "none";
 };
-
 // Hide loader
 const hideLoader = () => {
   loaderHtml.style.display = "none";
@@ -89,7 +89,7 @@ const renderProducts = (items: Product[]) => {
              }</p>
            </div>
            <div class="pric-cartbtn">
-             <span class="price">$${product.price.toFixed(2)}</span>
+             <span class="price">₹${product.price.toFixed(2)}</span>
              <button class="add-btn" title="Add to cart" data-id="${
                product.id
              }"><i class="fa fa-plus" aria-hidden="true"></i> Cart</button>
@@ -167,7 +167,8 @@ categoryButtons.forEach((btn) => {
     showLoader();
     categoryButtons.forEach((b) => b.classList.remove("active"));
     btn.classList.add("active");
-
+    sortSelect.value = "none";
+    searchInput.value = "";
     const category = btn.dataset.category;
     setTimeout(() => {
       category === "all"
@@ -186,11 +187,15 @@ categoryButtons.forEach((btn) => {
 //Search by name
 const handleSearch = _.debounce(() => {
   const searchTerm = searchInput.value.toLowerCase().trim();
-
   filteredProducts = searchTerm
     ? allProducts.filter((p) => p.title.toLowerCase().includes(searchTerm))
     : [...allProducts];
-
+  categoryButtons.forEach((b) => b.classList.remove("active"));
+  const allBtn = document.querySelector('[data-category="all"]');
+  if (allBtn) {
+    allBtn.classList.add("active");
+  }
+  sortSelect.value = "none";
   currentPage = 1;
   renderPaginatedData();
   paginatedProduct();
@@ -200,6 +205,7 @@ searchInput.addEventListener("input", handleSearch);
 //Sorting price and rate of products
 sortSelect.addEventListener("change", () => {
   const sortValue = sortSelect.value;
+  searchInput.value = "";
   showLoader();
   setTimeout(() => {
     switch (sortValue) {
@@ -256,12 +262,27 @@ const removeFromCart = (id: number) => {
   cartCount.textContent = cart.length.toString();
   renderCart();
 };
+// Calculate total price
+const calculateTotal = () => {
+  const total = cart.reduce((sum, item) => sum + (item.price || 0), 0);
+  cartTotalPrice.textContent = `$${total.toFixed(2)}`;
+};
+// Checkout button
+checkoutbtn.addEventListener("click", () => {
+  if (cart.length === 0) {
+    alert("Your cart is empty. Add some items before checkout!");
+    return;
+  }
+  saveCartToLocalStorage();
+  window.location.href = "checkout.html";
+});
 
 // Render cart
 const renderCart = () => {
   cartItemsContainer.innerHTML = "";
   if (cart.length === 0) {
     cartItemsContainer.innerHTML = "<p>Your cart is empty.</p>";
+    cartTotalPrice.textContent = "₹0.00";
     return;
   }
   cart.forEach((item) => {
@@ -272,10 +293,7 @@ const renderCart = () => {
         <img src="${item.image}" alt="${item.title}">
         <div class="hed-cart-item-center">
         <span title="${item.title}">${item.title.slice(0, 10)}..</span>
-        <p title="${item.category}">Category: ${item.category
-      .split(" ")
-      .map((x) => x.charAt(0).toUpperCase() + x.slice(1, 7))
-      .join(" ")}..</p>
+          <p>Price: ₹${item.price.toFixed(2)}</p>
         </div>
       </div>
       <div>
@@ -291,6 +309,7 @@ const renderCart = () => {
     });
     cartItemsContainer.appendChild(div);
   });
+  calculateTotal();
 };
 
 // Head cart item dropdown

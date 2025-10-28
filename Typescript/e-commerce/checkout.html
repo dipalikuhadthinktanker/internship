@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkout - Mini E-Shop</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="e-com.css" />
+     <link rel="stylesheet" href="e-com-resp.css" />
+</head>
+
+<body>
+    <header class="header">
+        <h1>Mini E-Shop</h1>
+    </header>
+    <div class="container">
+        <div class="checkout-header">
+              <button class="back-btn" onclick="window.location.href='e-com.html'">
+                <i class="fa fa-arrow-left"></i> Back to Shop
+            </button>
+            <h2 class="checkout-title">Shopping Bag</h2>
+        </div>
+        <div class="checkout-wrapper">
+            <div class="cart-section">
+                <div id="checkoutItems" class="cart-items"></div>
+            </div>
+            <div class="summary-section">
+                <div class="summary-box">
+                    <h3><i class="fa fa-gift" aria-hidden="true"></i>Discount Coupon</h3>
+                    <input type="text" id="couponCode" placeholder="Coupon Code" />
+                    <button class="apply-btn" id="applyCouponBtn">Apply</button>
+                </div>
+
+                <div class="summary-box summary-totals">
+                    <h3>Cart Total</h3>
+                    <div class="cartTotal-info">
+                        <p><span>Items</span> <span id="itemCount">0</span></p>
+                        <p><span>Subtotal</span> <span id="subtotal">$0.00</span></p>
+                        <p><span>Discount</span> <span id="discount">$0.00</span></p>
+                        <p><span>Total</span> <span id="finalTotal">$0.00</span></p>
+                    </div>
+
+                    <button class="place-order-btn" id="placeOrderBtn">
+                        Place Order
+                    </button>
+                </div>
+            </div>
+        </div>
+        <script src="checkout.js" type="module"></script>
+        <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+</body>
+
+</html>

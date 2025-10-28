@@ -12,13 +12,14 @@ let cart = JSON.parse(localStorage.getItem("cart") || "[]");
 const itemsPerPage = 8;
 let currentPage = 1;
 let filteredProducts = [];
-let timer;
 const productContainer = document.getElementById("productContainer");
 //Head cart item
 const cartCount = document.getElementById("cartCount");
 const cartItemsContainer = document.getElementById("cartItems");
 const cartIcon = document.getElementById("cartIcon");
 const carthideShow = document.querySelector(".cart");
+const cartTotalPrice = document.getElementById("cartTotal");
+const checkoutbtn = document.getElementById("checkoutBtn");
 //Category nav tab
 const categoryButtons = document.querySelectorAll(".category-btn");
 //Search input
@@ -86,7 +87,7 @@ const renderProducts = (items) => {
              <p><i class="fa fa-star" aria-hidden="true"></i> ${product.rating.rate}</p>
            </div>
            <div class="pric-cartbtn">
-             <span class="price">$${product.price.toFixed(2)}</span>
+             <span class="price">₹${product.price.toFixed(2)}</span>
              <button class="add-btn" title="Add to cart" data-id="${product.id}"><i class="fa fa-plus" aria-hidden="true"></i> Cart</button>
            </div>
         </div>
@@ -156,6 +157,8 @@ categoryButtons.forEach((btn) => {
         showLoader();
         categoryButtons.forEach((b) => b.classList.remove("active"));
         btn.classList.add("active");
+        sortSelect.value = "none";
+        searchInput.value = "";
         const category = btn.dataset.category;
         setTimeout(() => {
             category === "all"
@@ -174,6 +177,12 @@ const handleSearch = _.debounce(() => {
     filteredProducts = searchTerm
         ? allProducts.filter((p) => p.title.toLowerCase().includes(searchTerm))
         : [...allProducts];
+    categoryButtons.forEach((b) => b.classList.remove("active"));
+    const allBtn = document.querySelector('[data-category="all"]');
+    if (allBtn) {
+        allBtn.classList.add("active");
+    }
+    sortSelect.value = "none";
     currentPage = 1;
     renderPaginatedData();
     paginatedProduct();
@@ -182,6 +191,7 @@ searchInput.addEventListener("input", handleSearch);
 //Sorting price and rate of products
 sortSelect.addEventListener("change", () => {
     const sortValue = sortSelect.value;
+    searchInput.value = "";
     showLoader();
     setTimeout(() => {
         switch (sortValue) {
@@ -228,11 +238,26 @@ const removeFromCart = (id) => {
     cartCount.textContent = cart.length.toString();
     renderCart();
 };
+// Calculate total price
+const calculateTotal = () => {
+    const total = cart.reduce((sum, item) => sum + (item.price || 0), 0);
+    cartTotalPrice.textContent = `$${total.toFixed(2)}`;
+};
+// Checkout button
+checkoutbtn.addEventListener("click", () => {
+    if (cart.length === 0) {
+        alert("Your cart is empty. Add some items before checkout!");
+        return;
+    }
+    saveCartToLocalStorage();
+    window.location.href = "checkout.html";
+});
 // Render cart
 const renderCart = () => {
     cartItemsContainer.innerHTML = "";
     if (cart.length === 0) {
         cartItemsContainer.innerHTML = "<p>Your cart is empty.</p>";
+        cartTotalPrice.textContent = "₹0.00";
         return;
     }
     cart.forEach((item) => {
@@ -243,10 +268,7 @@ const renderCart = () => {
         <img src="${item.image}" alt="${item.title}">
         <div class="hed-cart-item-center">
         <span title="${item.title}">${item.title.slice(0, 10)}..</span>
-        <p title="${item.category}">Category: ${item.category
-            .split(" ")
-            .map((x) => x.charAt(0).toUpperCase() + x.slice(1, 7))
-            .join(" ")}..</p>
+          <p>Price: ₹${item.price.toFixed(2)}</p>
         </div>
       </div>
       <div>
@@ -260,6 +282,7 @@ const renderCart = () => {
         });
         cartItemsContainer.appendChild(div);
     });
+    calculateTotal();
 };
 // Head cart item dropdown
 cartIcon.addEventListener("click", (e) => {
